@@ -1,0 +1,329 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Page Title -->
+    <title>{% block title %}AiAgents.Directory{% endblock %}</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="AiAgents.Directory">
+    
+    {% block meta_basic %}
+    <link rel="canonical" href="{{ request.build_absolute_uri }}" />
+    <meta name="description" content="Discover and explore the best AI agents and tools. AiAgents.Directory is your comprehensive resource for finding the perfect AI agents.">
+    {% endblock %}
+
+    <!-- Open Graph / Social Meta Tags -->
+    {% block meta_social %}
+    <meta property="og:site_name" content="AiAgents.Directory">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{% block og_title %}AI Agents Directory{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Discover and explore the best AI agents and tools. AiAgents.Directory is your comprehensive resource for finding the perfect AI agents.{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-default-2.png' %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+    {% endblock %}
+
+    <!-- Twitter Meta Tags -->
+    {% block meta_twitter %}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-default-2.png' %}">
+    {% endblock %}
+
+    <!-- Schema.org Structured Data -->
+    {% block structured_data %}{% endblock %}
+    
+    <!-- Theme script -->
+    <script>
+        if (localStorage.getItem('color-theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+    
+    {% block css %}
+    <link href="{% static 'css/output.css' %}" rel="stylesheet" />
+    {% endblock css %}
+</head>
+<body class="min-h-screen bg-gray-50 dark:bg-dark-900 text-gray-800 dark:text-dark-100 transition-colors duration-200 flex flex-col">
+    <!-- Navigation -->
+    <nav class="bg-white/70 dark:bg-dark-900 backdrop-blur-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <a href="/" class="font-bold text-xl text-gray-900 dark:text-white">AiAgents.Directory</a>
+            
+            <!-- Mobile Menu Button -->
+            <button type="button" 
+                    class="sm:hidden p-2 rounded-lg text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300"
+                    onclick="toggleMobileMenu()">
+                <span class="sr-only">Open menu</span>
+                <!-- Hamburger icon -->
+                <svg class="w-6 h-6" id="hamburger-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                <!-- Close icon -->
+                <svg class="hidden w-6 h-6" id="close-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <!-- Desktop Navigation -->
+            <div class="hidden sm:flex items-center gap-3 sm:gap-6">
+                <a href="{% url 'agent_list' %}" class="text-gray-600 dark:text-dark-600 hover:text-gray-900 dark:hover:text-dark-100 transition-colors">
+                    Browse
+                </a>
+                <a href="{% url 'news_archive' %}" class="text-gray-600 dark:text-dark-600 hover:text-gray-900 dark:hover:text-dark-100 transition-colors">
+                    News
+                </a>
+                <a href="{% url 'about' %}" class="text-gray-600 dark:text-dark-600 hover:text-gray-900 dark:hover:text-dark-100 transition-colors">
+                    About Us
+                </a>
+                <!-- <a href="/blog/" class="text-gray-600 dark:text-dark-600 hover:text-gray-900 dark:hover:text-dark-100 transition-colors">
+                    Blog
+                </a> -->
+                
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" type="button" 
+                        class="p-2 rounded-lg bg-gray-100 dark:bg-dark-800 hover:bg-gray-200 dark:hover:bg-dark-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-accent-500 transition-colors">
+                    <!-- Sun icon -->
+                    <svg id="theme-toggle-light-icon" 
+                         class="hidden w-5 h-5" 
+                         fill="currentColor" 
+                         viewBox="0 0 20 20">
+                        <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
+                    </svg>
+                    <!-- Moon icon -->
+                    <svg id="theme-toggle-dark-icon" 
+                         class="hidden w-5 h-5" 
+                         fill="currentColor" 
+                         viewBox="0 0 20 20">
+                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                    </svg>
+                </button>
+                
+                <!-- Submit Agent - Secondary CTA -->
+                <a href="{% url 'agent_submission' %}" 
+                   class="px-4 py-2 rounded-lg
+                          bg-gray-100 dark:bg-dark-800 
+                          text-gray-700 dark:text-gray-300
+                          hover:bg-gray-200 dark:hover:bg-dark-700
+                          transition-colors">
+                    Submit Agent
+                </a>
+
+                <!-- Feature Your Agent - Primary CTA -->
+                <a href="https://buy.stripe.com/00g8AweljalJ45qbIJ"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg 
+                          bg-gradient-to-r from-accent-500 to-accent-600 
+                          hover:from-accent-600 hover:to-accent-700
+                          text-white font-medium 
+                          shadow-lg shadow-accent-500/20 hover:shadow-accent-500/30 
+                          transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                        <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
+                    </svg>
+                    Feature Agent
+                </a>
+            </div>
+
+            <!-- Mobile Navigation -->
+            <div class="sm:hidden flex items-center gap-3">
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle-mobile" type="button" 
+                        class="p-2 rounded-lg bg-gray-100 dark:bg-dark-800 hover:bg-gray-200 dark:hover:bg-dark-700 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-accent-500 transition-colors">
+                    <!-- Sun icon -->
+                    <svg id="theme-toggle-light-icon-mobile" 
+                         class="hidden w-5 h-5" 
+                         fill="currentColor" 
+                         viewBox="0 0 20 20">
+                        <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
+                    </svg>
+                    <!-- Moon icon -->
+                    <svg id="theme-toggle-dark-icon-mobile" 
+                         class="hidden w-5 h-5" 
+                         fill="currentColor" 
+                         viewBox="0 0 20 20">
+                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                    </svg>
+                </button>
+                
+                <!-- Mobile CTAs -->
+                <div class="flex items-center gap-2">
+                    <a href="{% url 'agent_submission' %}" 
+                       class="px-3 py-1.5 text-sm rounded-lg
+                              bg-gray-100 dark:bg-dark-800 
+                              text-gray-700 dark:text-gray-300
+                              hover:bg-gray-200 dark:hover:bg-dark-700
+                              transition-colors">
+                        Submit
+                    </a>
+                    <a href="https://buy.stripe.com/00g8AweljalJ45qbIJ"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="inline-flex items-center px-3 py-1.5 text-sm rounded-lg 
+                              bg-gradient-to-r from-accent-500 to-accent-600 
+                              hover:from-accent-600 hover:to-accent-700
+                              text-white font-medium 
+                              shadow-md shadow-accent-500/20
+                              transition-all">
+                        Feature
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden sm:hidden">
+            <div class="px-4 pt-2 pb-3 space-y-1 bg-white dark:bg-dark-900 border-t border-gray-200 dark:border-dark-700">
+                <a href="{% url 'agent_list' %}"
+                   class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 hover:bg-gray-50 dark:hover:bg-dark-800 dark:hover:text-white">
+                    Browse
+                </a>
+                <a href="{% url 'news_archive' %}"
+                   class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 hover:bg-gray-50 dark:hover:bg-dark-800 dark:hover:text-white">
+                    News
+                </a>
+                <a href="{% url 'about' %}"
+                   class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 hover:bg-gray-50 dark:hover:bg-dark-800 dark:hover:text-white">
+                    About Us
+                </a>
+                <!-- <a href="/blog/"
+                   class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 hover:bg-gray-50 dark:hover:bg-dark-800 dark:hover:text-white">
+                    Blog
+                </a> -->
+            </div>
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <!-- Theme Toggle Script -->
+    <script>
+        // Theme toggle functionality for both desktop and mobile
+        function setupThemeToggle(buttonId, darkIconId, lightIconId) {
+            var themeToggleDarkIcon = document.getElementById(darkIconId);
+            var themeToggleLightIcon = document.getElementById(lightIconId);
+            var themeToggleBtn = document.getElementById(buttonId);
+
+            // Change the icons inside the button based on previous settings
+            if (localStorage.getItem('color-theme') === 'light') {
+                themeToggleLightIcon.classList.remove('hidden');
+            } else {
+                themeToggleDarkIcon.classList.remove('hidden');
+            }
+
+            themeToggleBtn.addEventListener('click', function() {
+                // Toggle icons
+                themeToggleDarkIcon.classList.toggle('hidden');
+                themeToggleLightIcon.classList.toggle('hidden');
+
+                // Toggle theme
+                if (localStorage.getItem('color-theme')) {
+                    if (localStorage.getItem('color-theme') === 'light') {
+                        document.documentElement.classList.add('dark');
+                        localStorage.setItem('color-theme', 'dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                        localStorage.setItem('color-theme', 'light');
+                    }
+                } else {
+                    if (document.documentElement.classList.contains('dark')) {
+                        document.documentElement.classList.remove('dark');
+                        localStorage.setItem('color-theme', 'light');
+                    } else {
+                        document.documentElement.classList.add('dark');
+                        localStorage.setItem('color-theme', 'dark');
+                    }
+                }
+            });
+        }
+
+        // Initialize theme toggles
+        document.addEventListener('DOMContentLoaded', function() {
+            setupThemeToggle('theme-toggle', 'theme-toggle-dark-icon', 'theme-toggle-light-icon');
+            setupThemeToggle('theme-toggle-mobile', 'theme-toggle-dark-icon-mobile', 'theme-toggle-light-icon-mobile');
+        });
+
+        // Initial theme setup
+        if (localStorage.getItem('color-theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+
+    <!-- Footer -->
+    <footer class="bg-white/70 dark:bg-dark-900 backdrop-blur-sm border-t border-gray-200 dark:border-dark-700 mt-auto">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Categories -->
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">
+                        Categories
+                    </h3>
+                    <ul class="space-y-2">
+                        {% for category in footer_categories %}
+                        <li>
+                            <a href="{% url 'category_detail' slug=category.slug %}" 
+                               class="text-gray-600 dark:text-gray-400 hover:text-accent-500 dark:hover:text-accent-500 text-sm">
+                                {{ category.name }}
+                                <span class="text-gray-400 dark:text-gray-500">({{ category.agent_count }})</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- Company -->
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">
+                        Company
+                    </h3>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="{% url 'about' %}" class="text-gray-600 dark:text-gray-400 hover:text-accent-500 dark:hover:text-accent-500 text-sm">
+                                About
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'agent_submission' %}" 
+                               class="text-gray-600 dark:text-gray-400 hover:text-accent-500 dark:hover:text-accent-500 text-sm">
+                                Submit an Agent
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="border-t border-gray-200 dark:border-dark-700 mt-8 pt-8">
+                <div class="flex flex-col sm:flex-row justify-between items-center">
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">
+                        © {% now "Y" %} AiAgents.Directory. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Add this script at the end of your body tag -->
+    <script>
+    function toggleMobileMenu() {
+        const mobileMenu = document.getElementById('mobile-menu');
+        const hamburgerIcon = document.getElementById('hamburger-icon');
+        const closeIcon = document.getElementById('close-icon');
+        
+        mobileMenu.classList.toggle('hidden');
+        hamburgerIcon.classList.toggle('hidden');
+        closeIcon.classList.toggle('hidden');
+    }
+    </script>
+</body>
+</html> 

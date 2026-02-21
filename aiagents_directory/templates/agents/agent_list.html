@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Browse AI Agents | AiAgents.Directory{% endblock %}
+
+{% block meta_basic %}
+    <link rel="canonical" href="{{ request.build_absolute_uri }}" />
+    <meta name="description" content="{% if search_query %}Search results for '{{ search_query }}' - Browse matching AI agents.{% else %}Discover and explore the best AI agents and tools. AiAgents.Directory is your comprehensive resource for finding the perfect AI agents.{% endif %}">
+
+    {% if prev_page_url %}
+        <link rel="prev" href="{{ prev_page_url }}">
+    {% endif %}
+
+    {% if next_page_url %}
+        <link rel="next" href="{{ next_page_url }}">
+    {% endif %}
+{% endblock %}
+
+{% block og_title %}
+    {% if search_query %}
+        {{ search_query }} - Search Results | AiAgents.Directory
+    {% else %}
+        Browse AI Agents | AiAgents.Directory
+    {% endif %}
+{% endblock %}
+
+{% block og_description %}
+    {% if search_query %}
+        Search results for '{{ search_query }}' - Browse matching AI agents.
+    {% else %}
+        Discover and explore the best AI agents and tools. AiAgents.Directory is your comprehensive resource for finding the perfect AI solutions.
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<!-- Header Section -->
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <div class="text-center max-w-3xl mx-auto">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 text-gray-900 dark:text-white">
+            Browse AI Agents
+        </h1>
+        <p class="text-base sm:text-lg text-gray-600 dark:text-gray-300 mb-6 sm:mb-8 px-4">
+            Explore our curated collection of AI agents across various categories.
+        </p>
+        <div class="max-w-xl mx-auto px-4">
+            <form method="get" action="{% url 'agent_list' %}" class="relative">
+                <input type="text" 
+                       name="search" 
+                       placeholder="Search AI agents..." 
+                       class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-dark-700 focus:border-accent-500 dark:focus:border-accent-500 focus:ring-1 focus:ring-accent-500 text-gray-800 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400"
+                       value="{{ search_query }}">
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 lg:pb-20">
+    <!-- Categories Filter -->
+    <div class="flex flex-wrap gap-2 sm:gap-4 mb-6 sm:mb-8">
+        <!-- All Agents -->
+        <a href="{% url 'agent_list' %}{% if search_query %}?search={{ search_query }}{% endif %}" 
+           class="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-sm hover:shadow-md text-sm sm:text-base 
+                  bg-accent-500 text-white hover:bg-accent-600
+                  transition-all duration-200">
+            All Agents
+            <span class="ml-1 text-sm opacity-75">({{ total_agents_count }})</span>
+        </a>
+
+        <!-- Categories -->
+        {% for category in categories %}
+        <a href="{% url 'category_detail' slug=category.slug %}{% if search_query %}?search={{ search_query }}{% endif %}"
+           class="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-sm hover:shadow-md text-sm sm:text-base 
+                  bg-white dark:bg-dark-800 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-700 hover:text-accent-500 dark:hover:text-accent-500 border border-gray-200 dark:border-dark-700
+                  transition-all duration-200">
+            {{ category.name }}
+            <span class="ml-1 text-sm opacity-75">({{ category.agent_count }})</span>
+        </a>
+        {% endfor %}
+    </div>
+
+    {% if agents %}
+    <!-- Agents Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        {% for agent in agents %}
+            {% include "agents/partials/agent_card.html" with agent=agent %}
+        {% endfor %}
+    </div>
+
+    <!-- Results Count -->
+    <div class="text-center text-sm text-gray-600 dark:text-gray-400 mt-8">
+        Showing {{ page_obj.start_index }}-{{ page_obj.end_index }}
+        of {{ paginator.count }} agents
+        {% if search_query %}matching "{{ search_query }}"{% endif %}
+    </div>
+
+    <div class="mt-10">
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <div class="flex justify-center gap-2 mt-4">
+        {% if page_obj.has_previous %}
+        <a href="?{% if search_query %}search={{ search_query }}&{% endif %}page={{ page_obj.previous_page_number }}"
+           class="px-3 sm:px-4 py-2 rounded-lg bg-white dark:bg-dark-800 hover:bg-gray-50 dark:hover:bg-dark-700 text-sm sm:text-base transition-colors border border-gray-200 dark:border-dark-700">
+            Previous
+        </a>
+        {% endif %}
+        
+        {% if page_obj.has_next %}
+        <a href="?{% if search_query %}search={{ search_query }}&{% endif %}page={{ page_obj.next_page_number }}"
+           class="px-3 sm:px-4 py-2 rounded-lg bg-white dark:bg-dark-800 hover:bg-gray-50 dark:hover:bg-dark-700 text-sm sm:text-base transition-colors border border-gray-200 dark:border-dark-700">
+            Next
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <!-- No Results -->
+    <div class="text-center py-12">
+        <p class="text-lg text-gray-600 dark:text-gray-400">
+            {% if search_query %}
+                No agents found matching "{{ search_query }}"
+            {% else %}
+                No agents found
+            {% endif %}
+        </p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

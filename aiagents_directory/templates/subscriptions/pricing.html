@@ -1,0 +1,34 @@
+
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block javascript %}
+{{ block.super }}
+<script async src="https://js.stripe.com/v3/pricing-table.js"></script>
+{% endblock javascript %}
+
+{% block content %}
+<div class="max-w-8xl mx-auto px-2 sm:px-4 lg:px-8 my-8">
+    <div class="bg-white shadow-lg sm:rounded-lg overflow-hidden">
+        <div class="px-4 py-6 sm:px-6 lg:px-8">
+            <h3 class="text-xl leading-8 font-semibold text-gray-900">Our Pricing Plans</h3>
+            <p class="mt-2 text-sm text-gray-600">
+                Choose the plan that best fits your needs. We offer a variety of plans tailored to different requirements and budgets.
+            </p>
+            <div class="mt-6">
+                <!-- Stripe Pricing Table -->
+                <stripe-pricing-table
+                    pricing-table-id="{{ stripe_pricing_table_id }}"
+                    publishable-key="{{ stripe_publishable_key }}"
+                    client-reference-id="{{ stripe_client_reference_id }}"
+                >
+                </stripe-pricing-table>
+            </div>
+            <p class="mt-4 text-sm text-gray-500">
+                Contact our support team if you need help selecting the right plan or have any questions.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

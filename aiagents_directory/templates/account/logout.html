@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% translate "Sign Out" %}{% endblock %}
+
+{% block content %}
+  <div class="p-4 my-6 mx-4 bg-white rounded-lg">
+  <h1>{% translate "Sign Out" %}</h1>
+
+  <p class="text-justify text-gray-500 dark:text-gray-400">{% translate 'Are you sure you want to sign out?' %}</p>
+
+  <form method="post" action="{% url 'account_logout' %}">
+    {% csrf_token %}
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+    {% endif %}
+  <br>
+  <button type="submit" class="px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Sign Out</button>
+
+  </form>
+</div>
+{% endblock %}

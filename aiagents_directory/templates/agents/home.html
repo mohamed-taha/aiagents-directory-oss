@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}AI Agent Directory & Marketplace | Discover Top AI Tools & Agents{% endblock %}
+
+{% block meta_basic %}
+    <link rel="canonical" href="{{ request.build_absolute_uri }}" />
+    <meta name="description" content="Explore the leading AI agent directory and marketplace. Discover AI tools, platforms, and agents to automate your workflows and boost productivity. Your go-to resource for AI solutions.">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+    <div class="text-center max-w-3xl mx-auto">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 text-gray-900 dark:text-white">
+            The Ultimate AI Agent Directory & Marketplace
+        </h1>
+        <p class="text-base sm:text-lg text-gray-500 dark:text-gray-400 mb-6 sm:mb-8 px-4">
+            Discover top AI tools and agents to automate workflows, boost productivity, and drive business growth. Explore our AI agent directory for the best AI solutions.
+        </p>
+        <div class="max-w-xl mx-auto px-4">
+            <form method="get" action="{% url 'home' %}" class="relative">
+                <input type="text" 
+                       name="search" 
+                       placeholder="Search AI agents..." 
+                       class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-dark-700 focus:border-accent-500 dark:focus:border-accent-500 focus:ring-1 focus:ring-accent-500 text-gray-800 dark:text-dark-100 placeholder-gray-500 dark:placeholder-dark-600"
+                       value="{{ search_query }}">
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 lg:pb-20">
+    <!-- Categories Filter -->
+    <div class="flex flex-wrap gap-2 sm:gap-4 mb-6 sm:mb-8">
+        <!-- All Agents -->
+        <a href="{% url 'agent_list' %}{% if search_query %}?search={{ search_query }}{% endif %}" 
+           class="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-sm hover:shadow-md text-sm sm:text-base 
+                  {% if request.path == '/agents/' %}bg-accent-500 text-white hover:bg-accent-600
+                  {% else %}bg-white dark:bg-dark-800 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-700 hover:text-accent-500 dark:hover:text-accent-500 border border-gray-200 dark:border-dark-700{% endif %} 
+                  transition-all duration-200">
+            All Agents
+            <span class="ml-1 text-sm opacity-75">({{ total_agents_count }})</span>
+        </a>
+
+        <!-- Categories -->
+        {% for category in categories %}
+        <a href="{% url 'category_detail' slug=category.slug %}{% if search_query %}?search={{ search_query }}{% endif %}"
+           class="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-sm hover:shadow-md text-sm sm:text-base 
+                  bg-white dark:bg-dark-800 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-700 hover:text-accent-500 dark:hover:text-accent-500 border border-gray-200 dark:border-dark-700
+                  transition-all duration-200">
+            {{ category.name }}
+            <span class="ml-1 text-sm opacity-75">({{ category.agent_count }})</span>
+        </a>
+        {% endfor %}
+    </div>
+
+    {% if agents %}
+        <!-- Agents Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {% for agent in agents %}
+                {% include "agents/partials/agent_card.html" with agent=agent %}
+            {% endfor %}
+        </div>
+
+        <!-- Browse More Button -->
+        <div class="flex flex-col items-center mt-8 sm:mt-12">
+            <a href="{% url 'agent_list' %}{% if search_query %}?search={{ search_query }}{% endif %}"
+               class="inline-flex items-center px-6 py-3 rounded-lg bg-accent-500 hover:bg-accent-600 text-white transition-colors">
+                Browse All {{ total_agents_count }} Agents
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="mt-12">
+        </div>
+    {% else %}
+        <!-- No Results -->
+        <div class="text-center py-12">
+            <p class="text-lg text-gray-600 dark:text-gray-400">
+                {% if search_query %}
+                    No agents found matching "{{ search_query }}"
+                {% else %}
+                    No agents found
+                {% endif %}
+            </p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Submit Your AI Agent | AiAgents.Directory{% endblock %}
+
+{% block meta_basic %}
+    <link rel="canonical" href="{{ request.build_absolute_uri }}" />
+    <meta name="description" content="Submit your AI agent to AiAgents.Directory. Share your AI tool with thousands of users looking for the best AI solutions.">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+    <div class="text-center mb-8 sm:mb-12">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 text-gray-900 dark:text-white">
+            AiAgents.Directory - Submit Your Agent
+        </h1>
+    </div>
+
+    <!-- Submission Form -->
+    <div class="bg-white dark:bg-dark-800 rounded-2xl shadow-xl border border-gray-200 dark:border-dark-700 p-6 sm:p-8 lg:p-10">
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            
+            <!-- Email Field -->
+            <div>
+                <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                    {{ form.email.label }}
+                    <span class="text-red-500">*</span>
+                </label>
+                {% if form.email.help_text %}
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2 italic">
+                    {{ form.email.help_text }}
+                </p>
+                {% endif %}
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ form.email.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Agent Name Field -->
+            <div>
+                <label for="{{ form.agent_name.id_for_label }}" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                    {{ form.agent_name.label }}
+                    <span class="text-red-500">*</span>
+                </label>
+                {{ form.agent_name }}
+                {% if form.agent_name.errors %}
+                    <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ form.agent_name.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Agent Website Field -->
+            <div>
+                <label for="{{ form.agent_website.id_for_label }}" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                    {{ form.agent_website.label }}
+                    <span class="text-red-500">*</span>
+                </label>
+                {{ form.agent_website }}
+                {% if form.agent_website.errors %}
+                    <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ form.agent_website.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Agent Description Field -->
+            <div>
+                <label for="{{ form.agent_description.id_for_label }}" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                    {{ form.agent_description.label }}
+                    <span class="text-red-500">*</span>
+                </label>
+                {{ form.agent_description }}
+                {% if form.agent_description.errors %}
+                    <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ form.agent_description.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-4">
+                <button type="submit" 
+                        class="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg 
+                               bg-gradient-to-r from-accent-500 to-accent-600 
+                               hover:from-accent-600 hover:to-accent-700
+                               text-white font-medium text-lg
+                               shadow-lg shadow-accent-500/20 hover:shadow-accent-500/30 
+                               transition-all duration-200">
+                    Submit
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+        </form>
+
+        <!-- Help Text -->
+        <div class="mt-8 pt-6 border-t border-gray-200 dark:border-dark-700">
+            <p class="text-sm text-gray-600 dark:text-gray-400 text-center">
+                After submission, our team will review your agent for approval.
+            </p>
+        </div>
+    </div>
+
+    <!-- Additional Info -->
+    <div class="mt-8 text-center">
+        <p class="text-sm text-gray-600 dark:text-gray-400">
+            Want to get featured and reach more users? 
+            <a href="https://buy.stripe.com/00g8AweljalJ45qbIJ" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="text-accent-500 hover:text-accent-600 font-medium">
+                Feature your agent →
+            </a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+

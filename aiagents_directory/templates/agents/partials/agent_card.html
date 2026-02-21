@@ -1,0 +1,46 @@
+<a href="{% url 'agent_detail' slug=agent.slug %}" 
+   class="group block rounded-xl {% if agent.featured %}ring-2 ring-accent-500 dark:ring-accent-400{% else %}border border-gray-200 dark:border-dark-700{% endif %} bg-white dark:bg-dark-800 hover:shadow-lg transition-all duration-200 overflow-hidden relative">
+    
+    <!-- Badges: Featured and New -->
+    <div class="absolute top-3 right-3 z-10 flex flex-col gap-2 items-end">
+        {% if agent.featured %}
+        <span class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-medium bg-accent-500/10 text-accent-600 dark:text-accent-400">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
+            </svg>
+            Featured
+        </span>
+        {% endif %}
+        {% if agent.is_new %}
+        <span class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-medium bg-green-500/10 text-green-600 dark:text-green-400">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+            </svg>
+            New
+        </span>
+        {% endif %}
+    </div>
+
+    <div class="p-4 sm:p-5 lg:p-6">
+        <div class="flex items-center gap-4 sm:gap-5 mb-4 sm:mb-5">
+            <img src="{{ agent.logo.url }}" 
+                 alt="{{ agent.name }} logo" 
+                 class="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-xl object-contain {% if agent.featured %}bg-accent-50 dark:bg-accent-900/20{% else %}bg-gray-50 dark:bg-dark-900/50{% endif %} p-2 sm:p-2.5 lg:p-3"/>
+            <h2 class="font-semibold text-lg sm:text-xl lg:text-2xl group-hover:text-accent-500 transition-colors line-clamp-1">
+                {{ agent.name }}
+            </h2>
+        </div>
+        
+        <p class="text-sm sm:text-base lg:text-lg text-gray-700 dark:text-gray-300 mb-4 sm:mb-5 line-clamp-2 leading-relaxed group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+            {{ agent.short_description }}
+        </p>
+        
+        <div class="flex items-center gap-2 flex-wrap">
+            {% for category in agent.categories.all %}
+            <span class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm lg:text-base bg-gray-100 dark:bg-dark-700 text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                {{ category.name }}
+            </span>
+            {% endfor %}
+        </div>
+    </div>
+</a>

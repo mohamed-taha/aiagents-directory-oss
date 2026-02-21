@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}About - AI Agents Directory{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Learn more about AiAgents.Directory - A comprehensive directory of AI agents and tools.">
+{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+    <!-- Main Content -->
+    <div class="prose dark:prose-invert prose-lg max-w-none text-center">
+        <h1>About AiAgents.Directory</h1>
+        <p class="text-xl">
+            AiAgents.Directory is your comprehensive resource for discovering and exploring the most innovative AI agents and tools available today. We curate and categorize the best AI solutions to help you find the perfect tools for your needs.
+        </p>
+
+        <h2 class="mt-12">Submit Your Agent</h2>
+        <p>
+            Have an AI agent you'd like to submit? We'd love to hear from you!
+            Use our <a href="{% url 'agents:submit' %}" class="text-accent-500 hover:text-accent-600 dark:text-accent-300 dark:hover:text-accent-200">submission form</a> to add your AI agent to the directory.
+        </p>
+    </div>
+</div>
+{% endblock %}

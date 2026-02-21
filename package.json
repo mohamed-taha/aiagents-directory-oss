@@ -1,0 +1,15 @@
+{
+    "name": "aiagents_directory",
+    "version": "0.1.0",
+    "devDependencies": {
+        "@tailwindcss/typography": "^0.5.15"
+    },
+    "dependencies": {
+        "flowbite": "^2.2.0",
+        "tailwindcss": "^3.3.5"
+    },
+    "scripts": {
+        "dev": "tailwindcss -i ./aiagents_directory/static/css/input.css -o ./aiagents_directory/static/css/output.css -w",
+        "build": "tailwindcss -i ./aiagents_directory/static/css/input.css -o ./aiagents_directory/static/css/output.css -m"
+    }
+}

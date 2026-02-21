@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block meta %}
+<meta name="description" content="Explore the latest insights, tutorials, and news about AI agents, tools, and automation. Stay updated with the latest developments in artificial intelligence.">
+<meta name="keywords" content="AI agents, artificial intelligence, AI tools, automation, tech blog, AI news">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="AI Agents Directory Blog - Latest Insights & News">
+<meta property="og:description" content="Explore the latest insights, tutorials, and news about AI agents, tools, and automation. Stay updated with the latest developments in artificial intelligence.">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI Agents Directory Blog - Latest Insights & News">
+<meta name="twitter:description" content="Explore the latest insights, tutorials, and news about AI agents, tools, and automation. Stay updated with the latest developments in artificial intelligence.">
+
+<!-- Additional SEO -->
+<link rel="canonical" href="{{ request.build_absolute_uri }}">
+<meta name="robots" content="index, follow">
+{% endblock %}
+
+{% block title %}AI Agents Blog - Latest Insights & News About AI Tools{% endblock %}
+
+{% block content %}
+<!-- Hero Section - removed gradient, using base bg color -->
+<section class="relative py-12 sm:py-16">
+    <div class="container mx-auto px-4">
+        <div class="max-w-3xl mx-auto text-center">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                {{ page.title }}
+            </h1>
+            {% if page.intro %}
+            <div class="prose dark:prose-invert mx-auto text-gray-600 dark:text-gray-400">
+                {{ page.intro|richtext }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <!-- Subtle decorative elements -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
+        <div class="absolute -top-1/4 -right-1/4 w-1/2 h-1/2 bg-gradient-to-br from-accent-500/5 to-purple-500/5 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-1/4 -left-1/4 w-1/2 h-1/2 bg-gradient-to-tr from-accent-500/5 to-purple-500/5 rounded-full blur-3xl"></div>
+    </div>
+</section>
+
+<!-- Blog Posts Grid - removed background color -->
+<section class="py-8 sm:py-12">
+    <div class="container mx-auto px-4">
+        {% if blog_entries %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for post in blog_entries %}
+            <article class="group relative bg-white dark:bg-dark-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
+                <a href="{% pageurl post %}" class="absolute inset-0 z-10" aria-label="Read more about {{ post.title }}">
+                    <span class="sr-only">Read more about {{ post.title }}</span>
+                </a>
+                
+                {% if post.specific.get_first_image %}
+                {% image post.specific.get_first_image fill-600x340 as blog_image %}
+                <div class="aspect-w-16 aspect-h-9 rounded-t-lg overflow-hidden">
+                    <img src="{{ blog_image.url }}" 
+                         alt="{{ blog_image.alt|default:post.title }}"
+                         class="object-cover w-full h-full group-hover:scale-102 transition-transform duration-300">
+                </div>
+                {% endif %}
+                
+                <div class="p-5">
+                    <!-- Title first -->
+                    <h2 class="text-lg font-semibold mb-3 text-gray-900 dark:text-white group-hover:text-accent-500 dark:group-hover:text-accent-400 transition-colors">
+                        {{ post.title }}
+                    </h2>
+                    
+                    <!-- Description -->
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
+                        {{ post.specific.intro }}
+                    </p>
+                    
+                    <div class="mt-4 space-y-4">
+                        <!-- Author and Date -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-7 h-7 rounded-full bg-accent-50 dark:bg-accent-900/20 flex items-center justify-center text-accent-700 dark:text-accent-300 text-xs font-medium">
+                                    {{ post.specific.author|slice:":1" }}
+                                </div>
+                                <div class="ml-2">
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white">
+                                        {{ post.specific.author }}
+                                    </p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                                        {{ post.specific.date|date:"F j, Y" }}
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <span class="inline-flex items-center text-xs font-medium text-accent-600 dark:text-accent-400 group-hover:text-accent-700 dark:group-hover:text-accent-300 pointer-events-none">
+                                Read more
+                                <svg class="w-3.5 h-3.5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                        </div>
+                        
+                        <!-- Tags at the bottom with borders -->
+                        {% with post.specific.tags.all as tags %}
+                        {% if tags %}
+                        <div class="flex flex-wrap items-center gap-2 pt-4 border-t border-gray-100 dark:border-dark-700">
+                            {% for tag in tags %}
+                            <span class="inline-flex items-center px-2.5 py-1 text-xs font-medium 
+                                         border border-accent-100 dark:border-accent-500/20 
+                                         text-accent-600 dark:text-accent-400
+                                         hover:border-accent-200 dark:hover:border-accent-500/30
+                                         bg-accent-50/50 dark:bg-accent-500/5
+                                         hover:bg-accent-50 dark:hover:bg-accent-500/10
+                                         rounded-md transition-colors">
+                                {{ tag }}
+                            </span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-12">
+            <h3 class="text-lg text-gray-600 dark:text-gray-400">No blog posts yet. Check back soon!</h3>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

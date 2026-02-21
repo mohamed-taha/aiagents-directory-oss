@@ -1,0 +1,29 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account %}
+
+{% block head_title %}
+  {% translate "Verify Your E-mail Address" %}
+{% endblock head_title %}
+{% block inner %}
+  <div class="flex flex-col items-center justify-center px-6 pt-8 mx-auto md:h-screen pt:mt-0 dark:bg-gray-900">
+    <a href="AiAgents.Directory" class="flex items-center justify-center mb-8 text-2xl font-semibold lg:mb-10 dark:text-white">
+        <img src="https://flowbite-admin-dashboard.vercel.app/images/logo.svg" class="mr-4 h-11" alt="FlowBite Logo">
+        AiAgents.Directory
+    </a>
+    <!-- Card -->
+    <div class="w-full max-w-xl p-6 space-y-8 bg-white rounded-lg shadow sm:p-8 dark:bg-gray-800">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{% translate "Verify Your E-mail Address" %}</h2>
+        <p class="text-base font-normal text-gray-500 dark:text-gray-400">
+        {% if user.is_authenticated %}
+          {% include "account/snippets/already_logged_in.html" %}
+        {% endif %}
+        {% for message in messages %}
+          {{message}}
+        {% endfor %}
+        {% blocktranslate %}We have sent an e-mail to you for verification. Follow the link provided to finalize the signup process. Please contact us if you do not receive it within a few minutes.{% endblocktranslate %}
+      </p>
+    </div>
+  </div>
+{% endblock inner %}

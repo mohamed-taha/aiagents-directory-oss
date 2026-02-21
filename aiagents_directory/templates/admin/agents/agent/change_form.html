@@ -1,0 +1,53 @@
+{% extends 'admin/change_form.html' %}
+{% load i18n admin_urls %}
+
+{% block object-tools %}
+    <ul class="object-tools">
+        {% if enrich_button %}
+            <li>{{ enrich_button }}</li>
+        {% endif %}
+        {% block object-tools-items %}
+            {{ block.super }}
+        {% endblock %}
+    </ul>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    .object-tools a.button {
+        display: block;
+        padding: 4px 15px;
+        background: #2563eb;  /* Bright blue */
+        color: white;
+        border: none;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);  /* Subtle shadow */
+        transition: all 0.2s ease;
+    }
+    .object-tools a.button:hover {
+        background: #1d4ed8;  /* Darker blue on hover */
+        box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
+        transform: translateY(-1px);
+    }
+    [data-theme="dark"] .object-tools a.button {
+        background: #8b5cf6;  /* Purple for dark mode */
+        color: white;
+        box-shadow: 0 2px 4px rgba(139, 92, 246, 0.2);
+    }
+    [data-theme="dark"] .object-tools a.button:hover {
+        background: #7c3aed;  /* Darker purple on hover */
+        box-shadow: 0 4px 6px rgba(139, 92, 246, 0.3);
+        transform: translateY(-1px);
+    }
+    .object-tools li {
+        float: left;
+        margin-left: 5px;
+        list-style-type: none;
+    }
+</style>
+{% endblock %}

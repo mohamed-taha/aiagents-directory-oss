@@ -1,0 +1,53 @@
+
+{% load static i18n %}
+
+
+<!DOCTYPE html>
+
+{% get_current_language as LANGUAGE_CODE %}
+
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>
+    {% block head_title %}{% endblock head_title %}
+    - AiAgents.Directory
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Discover Your Perfect AI Agent Match" />
+  <meta name="author" content="example.com website" />
+  
+  <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
+  {% block css %}
+  <!-- Your stuff: Third-party CSS libraries go here -->
+  <!-- This file stores project-specific CSS -->
+  <link href="{% static 'css/output.css' %}" rel="stylesheet" />
+  {% endblock css %}
+  <!-- Le javascript
+      ================================================== -->
+  {% block javascript %}
+  <!-- place project specific Javascript in this file -->
+  <script defer src="{% static 'js/project.js' %}"></script>
+  {% endblock javascript %}
+  
+</head>
+<body class="bg-gray-50 dark:bg-gray-800">
+    <main class="bg-gray-50 dark:bg-gray-900">
+      {% block inner %}{% endblock inner %}
+    </main>
+
+    
+    {% block modal %}
+    {% endblock modal %}
+    {% block inline_javascript %}
+      <script>
+        window.addEventListener('DOMContentLoaded', () => {
+          {% block inline_code %}{% endblock inline_code %}
+        });
+      </script>
+    {% endblock inline_javascript %}
+    
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
+</body>
+</html>

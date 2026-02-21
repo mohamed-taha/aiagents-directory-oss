@@ -1,0 +1,31 @@
+
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load static %}
+{% load allauth %}
+
+{% block head_title %}{% translate "Login Cancelled" %}{% endblock %}
+
+{% block inner %}
+<section class="bg-gray-50 dark:bg-gray-900">
+  <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+      <a href="AiAgents.Directory" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+          <img class="w-8 h-8 mr-2" src="https://flowbite-admin-dashboard.vercel.app/images/logo.svg" alt="logo">
+          AiAgents.Directory
+      </a>
+      <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+        <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+            <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                {% trans "Login Cancelled" %}
+            </h1>
+            <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+                {% blocktrans %}You decided to cancel logging in to our site using one of your existing accounts. If this was a mistake, please proceed to{% endblocktrans %}
+                <a href="{% url 'account_login' %}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">{% trans "sign in" %}</a>.
+            </p>
+        </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

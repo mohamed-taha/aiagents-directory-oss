@@ -1,0 +1,71 @@
+
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block javascript %}
+{{ block.super }}
+<script async src="https://js.stripe.com/v3/pricing-table.js"></script>
+{% endblock javascript %}
+
+{% block content %}
+<div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 my-12">
+    <div class="bg-white shadow-lg sm:rounded-lg overflow-hidden">
+        <div class="px-6 py-8 sm:p-10">
+            {% if user_has_access %}
+            <h3 class="text-2xl font-semibold text-gray-900 mb-4">Your Subscription Details</h3>
+            <div class="bg-gray-50 p-5 rounded-lg shadow">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-700">
+                    <div>
+                        <div class="mb-4">
+                            <h5 class="text-lg font-medium text-gray-800">Plan Name</h5>
+                            <p>{{ subscription.plan }}</p>
+                        </div>
+                        <div>
+                            <h5 class="text-lg font-medium text-gray-800">Status</h5>
+                            <p>
+                                <span class="px-3 py-1 rounded-full text-white" style="background-color: {% if subscription.status == 'active' %}#10B981{% else %}#EF4444{% endif %};">
+                                    {{ subscription.status|capfirst }}
+                                </span>
+                                {% if subscription.status == 'active' %}
+                                    {% if subscription.cancel_at_period_end %}
+                                        <span class="text-sm">(Expires on {{ subscription.current_period_end|date:"F d, Y" }})</span>
+                                    {% else %}
+                                        <span class="text-sm">(Renews on {{ subscription.current_period_end|date:"F d, Y" }})</span>
+                                    {% endif %}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <h5 class="text-lg font-medium text-gray-800">Subscription Start</h5>
+                        <p>{{ subscription.start_date|date:"F d, Y" }}</p>
+                    </div>
+                </div>
+                <div class="mt-6 text-right">
+                    <a href="{% url 'subscriptions:manage' %}" class="inline-flex items-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:border-primary-700 focus:shadow-outline-primary transition duration-150 ease-in-out">
+                        Manage Subscription
+                    </a>
+                </div>
+            </div>
+            {% else %}
+            <h3 class="text-2xl font-semibold text-gray-900">You are not currently subscribed</h3>
+            <p class="mt-2 mb-6 text-sm text-gray-600">
+                Explore our plans below and select the best option to start enjoying all the benefits today. If you need any assistance or have questions, our support team is here to help you.
+            </p>
+            <div>
+                <!-- Stripe Pricing Table -->
+                <stripe-pricing-table
+                    pricing-table-id="{{ stripe_pricing_table_id }}"
+                    publishable-key="{{ stripe_publishable_key }}"
+                    client-reference-id="{{ stripe_client_reference_id }}"
+                >
+                </stripe-pricing-table>
+            </div>
+            <p class="mt-4 text-sm text-gray-500">
+                Contact our support team if you need help selecting the right plan or have any questions.
+            </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

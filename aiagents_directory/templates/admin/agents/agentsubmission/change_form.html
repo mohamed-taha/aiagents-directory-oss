@@ -1,0 +1,30 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block submit_buttons_bottom %}
+    {{ block.super }}
+    
+    {% if enrich_button or review_button or approve_button or reject_button %}
+        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
+            <h3 style="margin-bottom: 10px;">Quick Actions</h3>
+            
+            {% if enrich_button or review_button %}
+                <p style="color: #666; margin-bottom: 10px; font-size: 13px;">
+                    <strong>Step 1:</strong> Enrich with website data. <strong>Step 2:</strong> Run AI review (no auto-approve).
+                </p>
+                {{ enrich_button }}
+                {{ review_button }}
+                <br><br>
+            {% endif %}
+            
+            {% if approve_button or reject_button %}
+                <p style="color: #666; margin-bottom: 10px; font-size: 13px;">
+                    <strong>Step 3:</strong> Approve creates a published Agent. Reject marks as rejected.
+                </p>
+                {{ approve_button }}
+                {{ reject_button }}
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}
+

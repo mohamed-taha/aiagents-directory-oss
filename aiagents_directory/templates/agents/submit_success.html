@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Submission Successful | AiAgents.Directory{% endblock %}
+
+{% block meta_basic %}
+    <link rel="canonical" href="{{ request.build_absolute_uri }}" />
+    <meta name="description" content="Your agent submission has been received. We'll review it and get back to you soon.">
+{% endblock %}
+
+{% block content %}
+<!-- Success Message Section -->
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+    <div class="text-center mb-12">
+        <!-- Success Icon -->
+        <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 mb-6 rounded-full bg-green-100 dark:bg-green-900/20">
+            <svg class="w-10 h-10 sm:w-12 sm:h-12 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
+            Thank you for submitting your AI agent!
+        </h1>
+        <p class="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-8">
+            We've received your submission and will review it shortly.
+        </p>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <a href="{% url 'home' %}" 
+               class="inline-flex items-center px-6 py-3 rounded-lg 
+                      bg-accent-500 hover:bg-accent-600 
+                      text-white font-medium 
+                      shadow-lg shadow-accent-500/20 hover:shadow-accent-500/30 
+                      transition-all duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                </svg>
+                Back to Home
+            </a>
+            <a href="https://buy.stripe.com/00g8AweljalJ45qbIJ" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="inline-flex items-center px-6 py-3 rounded-lg 
+                      bg-white dark:bg-dark-800 
+                      text-gray-800 dark:text-gray-200 
+                      border border-gray-200 dark:border-dark-700
+                      hover:bg-gray-50 dark:hover:bg-dark-700
+                      font-medium 
+                      transition-all duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
+                    <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
+                </svg>
+                Feature Your Agent
+            </a>
+        </div>
+    </div>
+
+    <!-- What's Next Section -->
+    <div class="bg-white dark:bg-dark-800 rounded-2xl shadow-xl border border-gray-200 dark:border-dark-700 p-6 sm:p-8 mb-12">
+        <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white text-center">
+            What Happens Next?
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Step 1 -->
+            <div class="text-center">
+                <div class="inline-flex items-center justify-center w-12 h-12 mb-4 rounded-full bg-accent-100 dark:bg-accent-900/20 text-accent-600 dark:text-accent-400 font-bold text-lg">
+                    1
+                </div>
+                <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
+                    Review
+                </h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                    Our team will review your submission for quality and relevance
+                </p>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="text-center">
+                <div class="inline-flex items-center justify-center w-12 h-12 mb-4 rounded-full bg-accent-100 dark:bg-accent-900/20 text-accent-600 dark:text-accent-400 font-bold text-lg">
+                    2
+                </div>
+                <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
+                    Approval
+                </h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                    Our team will approve quality submissions
+                </p>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="text-center">
+                <div class="inline-flex items-center justify-center w-12 h-12 mb-4 rounded-full bg-accent-100 dark:bg-accent-900/20 text-accent-600 dark:text-accent-400 font-bold text-lg">
+                    3
+                </div>
+                <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
+                    Published
+                </h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                    Your agent goes live on AiAgents.Directory
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Agents Section -->
+    {% if agents %}
+    <div class="mb-12">
+        <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-gray-900 dark:text-white text-center">
+            Explore Featured Agents
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {% for agent in agents %}
+                {% include "agents/partials/agent_card.html" with agent=agent %}
+            {% endfor %}
+        </div>
+        <div class="text-center mt-8">
+            <a href="{% url 'agent_list' %}" 
+               class="inline-flex items-center text-accent-500 hover:text-accent-600 font-medium">
+                Browse All {{ total_agents_count }} Agents
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
