@@ -15,46 +15,82 @@ A curated directory of AI agents with an automated discovery and review pipeline
 
 ## Auto-Discovery Pipeline
 
-The core innovation: a fully automated pipeline that discovers AI agents from the web.
+How it works under the hood: a fully automated pipeline that discovers AI agents from the web.
 
 ```
-                                    ┌─────────────────┐
-                                    │  SERP Search    │
-                                    │  (Firecrawl)    │
-                                    └────────┬────────┘
-                                             │
-                                             ▼
-┌──────────────────────────────────────────────────────────────────────────────┐
-│                              SOURCING                                         │
-│  • Searches Google with curated queries ("AI sales agent", "AI coding agent")│
-│  • Filters URLs (blocklists, allowlists, path patterns)                       │
-│  • Deduplicates against existing agents                                       │
-│  • Creates AgentSubmission records                                            │
-└──────────────────────────────────────────────────────────────────────────────┘
-                                             │
-                                             ▼
-┌──────────────────────────────────────────────────────────────────────────────┐
-│                              ENRICHMENT                                       │
-│  • Scrapes agent website via Firecrawl/Zyte                                  │
-│  • Extracts: name, description, features, use cases, pricing                 │
-│  • Downloads logo and screenshot                                              │
-│  • Handles aggregator pages (extracts real product URL)                       │
-└──────────────────────────────────────────────────────────────────────────────┘
-                                             │
-                                             ▼
-┌──────────────────────────────────────────────────────────────────────────────┐
-│                              AI REVIEW                                        │
-│  • GPT-4 validates if URL is a legitimate AI agent                           │
-│  • Detects: templates, feature pages, blog posts, academic papers            │
-│  • Returns: decision (approved/rejected), confidence score, reasoning        │
-│  • Auto-applies decisions above confidence threshold                          │
-└──────────────────────────────────────────────────────────────────────────────┘
-                                             │
-                                             ▼
-                                    ┌─────────────────┐
-                                    │  Published      │
-                                    │  Agent          │
-                                    └─────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                              1. SOURCING                                        │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │ Firecrawl Search API                                                     │   │
+│  │ • Searches Google with rotating queries (evergreen + trending + category)│   │
+│  │ • Returns blog posts, directories, list articles mentioning AI agents   │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                                      │                                          │
+│                                      ▼                                          │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │ LLM-Powered Extraction (via Firecrawl)                                  │   │
+│  │ • JSON schema + prompt extracts AI agent products from each page        │   │
+│  │ • Finds agents buried in list articles, not just homepage links         │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                                      │                                          │
+│                                      ▼                                          │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │ URL Filtering Pipeline                                                   │   │
+│  │ • Domain blocklist → Aggregator detection → Path filtering → Allowlist  │   │
+│  │ • Deduplicates against existing agents                                   │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                              2. ENRICHMENT                                      │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │ Firecrawl Scrape (single API call, multiple formats)                    │   │
+│  │ • JSON: Schema-guided extraction (features, pricing, use cases, etc.)   │   │
+│  │ • Markdown: Raw content for AI review context                           │   │
+│  │ • Screenshot: Viewport capture (auto-downloaded before expiry)          │   │
+│  │ • Branding: Logo, colors, fonts                                         │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                                      │                                          │
+│                                      ▼                                          │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │ Aggregator Handling                                                      │   │
+│  │ • Detects ProductHunt/YC/Crunchbase pages                               │   │
+│  │ • Extracts actual product URL via secondary LLM extraction              │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                              3. AI REVIEW                                       │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │ Pydantic AI Agent (GPT-powered)                                         │   │
+│  │ • Validates if submission is a legitimate AI agent                      │   │
+│  │ • Input: name, URL, enrichment data, raw markdown                       │   │
+│  │ • Output: Structured ReviewResult (Pydantic model)                      │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                                      │                                          │
+│                                      ▼                                          │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │ Classification & Flags                                                   │   │
+│  │ • Detects: template pages, feature subpages, aggregator listings,       │   │
+│  │   blog posts, academic papers, prohibited content                        │   │
+│  │ • Returns: decision + confidence score (0-1) + reasoning + flags        │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                                      │                                          │
+│                                      ▼                                          │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │ Confidence-Based Auto-Apply                                              │   │
+│  │ • confidence ≥ 0.7 → auto-approve/reject                                │   │
+│  │ • confidence < 0.7 → flag for manual review                             │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                       │
+                                       ▼
+                              ┌─────────────────┐
+                              │   Published     │
+                              │     Agent       │
+                              └─────────────────┘
 ```
 
 ### Pipeline Commands
